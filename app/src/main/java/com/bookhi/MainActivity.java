@@ -15,17 +15,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       final FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         HomePageFragment homePageFragment = new HomePageFragment();
-        transaction.replace(R.id.layout_root,homePageFragment);
+        transaction.replace(R.id.layout_root, homePageFragment);
         homePageFragment.setRegisterButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.addToBackStack(null);
-//                transaction.attach(new RegisterFragment());
-                transaction.replace(R.id.layout_root,new RegisterFragment());
+                transaction.replace(R.id.layout_root, new RegisterFragment());
                 transaction.commit();
             }
         });
@@ -37,7 +36,5 @@ public class MainActivity extends AppCompatActivity {
         });
         transaction.commit();
     }
-
-
 
 }

@@ -13,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
 import com.bookhi.R;
+import com.bookhi.di.component.DaggerHomePageComponent;
+import com.bookhi.di.component.HomePageComponent;
+
+import javax.inject.Inject;
 
 /**
  * Created by Limingyu on 2017/4/4.
@@ -20,23 +24,21 @@ import com.bookhi.R;
 public class HomePageFragment extends Fragment {
 
     private ViewFlipper viewFlipper;
-
     private Button mRegisterButton;
     private Button mLoginButton;
+
+    private HomePageComponent mComponent;
 
     private View.OnClickListener mRegisterButtonOnClickListener;
     private View.OnClickListener mLoginButtonOnClickListener;
 
-    int[] resources = {
-            R.mipmap.dribbble1,
-            R.mipmap.dribbble2,
-            R.mipmap.dribbble3,
-    };
+    @Inject
+    int[] resources;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_homepage,null);
+        View view = inflater.inflate(R.layout.fragment_homepage, null);
         viewFlipper = (ViewFlipper) view.findViewById(R.id.viewflipper);
         for (int i = 0; i < resources.length; ++i) {
             ImageView imageView = new ImageView(getActivity());
@@ -48,26 +50,28 @@ public class HomePageFragment extends Fragment {
         viewFlipper.setInAnimation(getActivity(), android.R.anim.fade_out);
         viewFlipper.setAutoStart(true);
         viewFlipper.setFlipInterval(4000);
-        mRegisterButton = (Button)view.findViewById(R.id.button_register);
+        mRegisterButton = (Button) view.findViewById(R.id.button_register);
         mRegisterButton.setOnClickListener(mRegisterButtonOnClickListener);
-        mLoginButton = (Button)view.findViewById(R.id.button_login);
+        mLoginButton = (Button) view.findViewById(R.id.button_login);
         mLoginButton.setOnClickListener(mLoginButtonOnClickListener);
         CustomGestureDetector customGestureDetector = new CustomGestureDetector();
         gestureDetector = new GestureDetector(getActivity(), customGestureDetector);
         return view;
     }
 
-    public void setRegisterButtonClickListener(View.OnClickListener listener){
+    public void setRegisterButtonClickListener(View.OnClickListener listener) {
         mRegisterButtonOnClickListener = listener;
     }
 
-    public void setLoginButtonClickListener(View.OnClickListener listener){
+    public void setLoginButtonClickListener(View.OnClickListener listener) {
         mLoginButtonOnClickListener = listener;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mComponent = DaggerHomePageComponent.create();
+        mComponent.inject(this);
     }
 
     private GestureDetector gestureDetector;
@@ -88,11 +92,5 @@ public class HomePageFragment extends Fragment {
         }
 
     }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        gestureDetector.onTouchEvent(event);
-//        return super.onTouchEvent(event);
-//    }
 
 }
